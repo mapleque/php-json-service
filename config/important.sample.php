@@ -3,9 +3,10 @@
 class Important
 {
 	const DOMAIN = '';
-	const DB_ADDR = '';
-	const DB_PORT= '';
-	const DB_USER= '';
-	const DB_PASS= '';
-	const DB_NAME= '';
+
+	const DB_ADDR = '127.0.0.1';
+	const DB_PORT= 3306;
+	const DB_USER= 'admin';
+	const DB_PASS= 'admin';
+	const DB_NAME= 'simple';
 }
