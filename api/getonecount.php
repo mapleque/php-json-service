@@ -6,4 +6,4 @@ require __DIR__ . '/../core/base.php';
 
 $ret = One::getOneCount();
 
-Base::dieWithResponse($ret);
+Base::dieWithResponse([ 'count' => $ret ]);

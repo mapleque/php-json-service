@@ -17,6 +17,14 @@ class DBConn extends mysqli
 	{
 		$select_stmt = self::execQuery($query, $bind);
 
+		$variables = [];
+		$temp_data = [];
+
+		$metadata = $select_stmt->result_metadata();
+		for ($field = $metadata->fetch_field(); $field ; $field = $metadata->fetch_field())
+			$variables[] = &$temp_data[$field->name];
+		call_user_func_array([ $select_stmt, 'bind_result' ], $variables);
+
 		$result = [];
 		while ($select_stmt->fetch()) {
 			$obj = [];
@@ -33,7 +41,7 @@ class DBConn extends mysqli
 	public function insert($query, $bind = null)
 	{
 		$insert_stmt = self::execQuery($query, $bind);
-		if ($insert_stmt === FALSE && $allow_fail) {
+		if ($insert_stmt === FALSE) {
 			return -1;
 		}
 
@@ -57,8 +65,31 @@ class DBConn extends mysqli
 	private function execQuery($query, $params = null)
 	{
 		$stmt = self::prepare($query);
+		if (is_array($params) && count($params) > 0) {
+			$params_refs = [];
+			$types = '';
+			foreach ($params as $k => $v) {
+				if ($v === null) {
+					static $null = null;
+					$params_refs[$k] = &$null;
+					$types .= 'i';
+				} else {
+					$params_refs[$k] = &$params[$k];
+					if (is_int($v) || is_bool($v))
+						$types .= 'i';
+					elseif (is_float($v))
+						$types .= 'd';
+					elseif (is_string($v))
+						$types .= 's';
+					else
+						$types .= 'b';
+				}
+			}
+			array_unshift($params_refs, $types);
+			call_user_func_array([ $stmt, 'bind_param' ], $params_refs);
+		}
 
-		$if ($stmt->execute()) {
+		if ($stmt->execute()) {
 			return $stmt;
 		} else {
 			$stmt->close();

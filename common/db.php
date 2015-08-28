@@ -28,5 +28,8 @@ class DB
 				Important::DB_PORT
 			);
 		}
+		return self::$conn;
 	}
+
+	private static $conn = null;
 }

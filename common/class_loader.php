@@ -24,7 +24,7 @@ class ClassLoader
 	 */
 	public static function appendMap(array $additional_map)
 	{
-		self:$class_map = array_merge(self:$class_map, $additional_map);
+		self::$class_map = array_merge(self::$class_map, $additional_map);
 	}
 
 	/**
@@ -58,9 +58,9 @@ class ClassLoader
 	private static $class_map = [
 		'Important'			=> '../config/important',
 
-		'DB'			=> '../common/db',
+		'DB'			    => '../common/db',
 		'DBConn'			=> '../common/db_conn',
 
-		'Base'			=> '../common/base',
+		'Base'			    => '../common/base',
 	];
 }

@@ -8,4 +8,4 @@ require dirname(__FILE__) . '/status.php';
 require dirname(__FILE__) . '/class_loader.php';
 require dirname(__FILE__) . '/base.php';
 
-ClassLoader:init();
+ClassLoader::init();
